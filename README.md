@@ -5,11 +5,7 @@ Flood Guard is a predictive modeling project designed to assess the risk of floo
 ## Table of Contents
 - [Features](#features)
 - [Technologies Used](#technologies-used)
-- [Getting Started](#getting-started)
-- [Usage](#usage)
-- [Contributing](#contributing)
 - [License](#license)
-- [Acknowledgments](#acknowledgments)
 
 ## Features
 - **Data Analysis**: Analyze historical rainfall and weather data to identify patterns and trends.
