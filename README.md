@@ -1,6 +1,6 @@
 # Flood Guard
 
-Flood Guard is a predictive modeling project designed to assess the risk of flooding in Kerala based on current rainfall conditions. By utilizing historical weather data and machine learning techniques, this project aims to forecast potential flooding events, providing essential insights for disaster management and response.
+Flood Guard is a predictive modeling project designed to assess the risk of flooding in US based on current rainfall conditions. By utilizing historical weather data and machine learning techniques, this project aims to forecast potential flooding events, providing essential insights for disaster management and response.
 
 ## Table of Contents
 - [Features](#features)
@@ -12,6 +12,12 @@ Flood Guard is a predictive modeling project designed to assess the risk of floo
 - *Data Analysis*: Analyze historical rainfall and weather data to identify patterns and trends.
 - *Predictive Modeling*: Implement machine learning algorithms, specifically XGBoost, to predict the likelihood of flooding based on real-time weather conditions.
 - *Visualization*: Create visual representations of data to communicate findings effectively.
+
+### Demo
+
+Here's a demo of how **Flood Guard** works:
+
+![Flood Guard Demo](demo.gif)
 
 ## Dataset
 
