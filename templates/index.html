@@ -3,63 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML Model Prediction</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Flood Severity Prediction</title>
+    <!-- Bootstrap CSS for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Ltrj/0xF5BY9Ykdrf4pS9O2dIje6ZC8wR2GV9tENjC2N6Qh4KzCIE/J6hszFj+J9" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .form-control {
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>ML Model Prediction</h1>
-        <form id="prediction-form">
-            <div class="input-container">
-                <label for="tavg">Temperature Average (tavg):</label>
-                <input type="number" step="0.01" id="tavg" name="tavg" required>
+        <div class="card">
+            <div class="card-header text-center">
+                <h4>Flood Severity Prediction</h4>
             </div>
-            <div class="input-container">
-                <label for="prcp">Precipitation (prcp):</label>
-                <input type="number" step="0.01" id="prcp" name="prcp" required>
+            <div class="card-body">
+                <form method="POST" action="/predict">
+                    <div class="mb-3">
+                        <label for="state" class="form-label">State</label>
+                        <input type="text" class="form-control" id="state" name="state" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tavg" class="form-label">Average Temperature (°C)</label>
+                        <input type="number" class="form-control" id="tavg" name="tavg" step="any" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tmin" class="form-label">Min Temperature (°C)</label>
+                        <input type="number" class="form-control" id="tmin" name="tmin" step="any" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tmax" class="form-label">Max Temperature (°C)</label>
+                        <input type="number" class="form-control" id="tmax" name="tmax" step="any" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="prcp" class="form-label">Precipitation (mm)</label>
+                        <input type="number" class="form-control" id="prcp" name="prcp" step="any" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="snow" class="form-label">Snow (mm)</label>
+                        <input type="number" class="form-control" id="snow" name="snow" step="any" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="wdir" class="form-label">Wind Direction (°)</label>
+                        <input type="number" class="form-control" id="wdir" name="wdir" step="any" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="wspd" class="form-label">Wind Speed (m/s)</label>
+                        <input type="number" class="form-control" id="wspd" name="wspd" step="any" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pres" class="form-label">Pressure (hPa)</label>
+                        <input type="number" class="form-control" id="pres" name="pres" step="any" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Predict</button>
+                    </div>
+                </form>
             </div>
-            <button type="submit">Predict</button>
-        </form>
-        <table id="result-table" style="display:none;">
-            <thead>
-                <tr>
-                    <th>Prediction</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td id="prediction-result"></td>
-                </tr>
-            </tbody>
-        </table>
+        </div>
     </div>
-    <script>
-        document.getElementById('prediction-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const tavg = document.getElementById('tavg').value;
-            const prcp = document.getElementById('prcp').value;
 
-            try {
-                const response = await fetch('/predict', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({ tavg, prcp })
-                });
-
-                const data = await response.json();
-                if (data.prediction) {
-                    document.getElementById('result-table').style.display = 'table';
-                    document.getElementById('prediction-result').innerText = data.prediction;
-                } else {
-                    alert(data.error || "An error occurred");
-                }
-            } catch (error) {
-                console.error(error);
-                alert("Failed to fetch prediction");
-            }
-        });
-    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gyb7RNTNqv5nIuNol6j0jtF7S8l7fFzV5T5oXjQ+Vu2x5kX7Rl" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-cuJf6X9eqa3eZjpLtq0Xq3s3p4q3g6I7tx5XN9wH3qfnQf5FZ7reXJ0Xw2cKf13l" crossorigin="anonymous"></script>
 </body>
 </html>

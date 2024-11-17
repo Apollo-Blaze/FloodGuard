@@ -12,17 +12,18 @@ print(sns.__version__)
 file_path = 'C:/Users/shrey/OneDrive/Desktop/floodguard/final.csv'  
 final = pd.read_csv(file_path)
 
-# Check missing values
-NAs = pd.concat([final.isnull().sum()], axis=1, keys=["Final"])
-print("Missing values:")
-print(NAs[NAs.sum(axis=1) > 0])
-final.head(5)
+print('hi')
+print(final.columns)
+
 
 # Check missing values
 NAs = pd.concat([final.isnull().sum()], axis=1, keys=["Final"])
 print("Missing values:")
 print(NAs[NAs.sum(axis=1) > 0])
 final.head(5)
+
+print('hi')
+print(final.columns)
 
 
 # Fill missing values for numerical columns
@@ -30,8 +31,23 @@ numerical_cols = ['tavg', 'prcp', 'snow', 'wdir', 'wspd', 'pres']
 for col in numerical_cols:
     final[col].fillna(final[col].mean(), inplace=True)
 
+# Convert the 'state' column to categorical values (integer codes)
+if 'state' in final.columns:
+    final['state'] = pd.Categorical(final['state']).codes
+else:
+    print("The 'state' column is not found in the dataset.")
+
+# Check the first few rows to confirm the conversion
+print(final.head(5))
+
+
+columns_to_drop = ['disaster', 'disaster_info', 'designated_area', 'category', 'date']
+columns_to_drop = [col for col in columns_to_drop if col in final.columns]
+final = final.drop(columns=columns_to_drop, axis=1)
+
 # Create dummy variables
 final = pd.get_dummies(final)
+print(final.columns)
 
 # Create severity bins
 bins = [final['severity'].min(), 2, 4, final['severity'].max()]
@@ -40,11 +56,20 @@ labels = ['Low', 'Medium', 'High']
 
 # Convert severity to categories
 final['severity'] = pd.cut(final['severity'], bins=bins, labels=labels, right=False)
+final.info()
+# Convert the 'state' column to categorical values (integer codes)
+
+
+# Check the first few rows to confirm the conversion
+print(final.head(5))
+
 
 
 # Split features and target
-X = final.drop(['severity'], axis=1)
 y = final['severity']
+columns_to_drop = ['severity', 'disaster', 'disaster_info', 'designated_area', 'category', 'date']
+columns_to_drop = [col for col in columns_to_drop if col in final.columns]
+X = final.drop(columns=columns_to_drop, axis=1)
 
 
 # Split train test
@@ -64,8 +89,11 @@ xgb_model = xgb.XGBClassifier(
     random_state=42,
     objective='multi:softprob',
     num_class=len(labels),
-      eval_metric='mlogloss' 
+    eval_metric='mlogloss',
+    enable_categorical=True 
 )
+
+print('i')
 
 
 xgb_model.fit(
@@ -77,6 +105,7 @@ xgb_model.fit(
 )
 
 
+
 # Make predictions
 y_pred_proba = xgb_model.predict_proba(X_test)
 y_pred_num = np.argmax(y_pred_proba, axis=1)
@@ -85,6 +114,7 @@ y_pred = pd.Categorical.from_codes(y_pred_num, categories=labels)
 
 
 
+print('hello')
 # Print metrics
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy: {accuracy * 100:.2f}%")
@@ -103,5 +133,4 @@ feature_importance = pd.DataFrame({
 
 print(feature_importance)
 
-xgb_model.save_model("xgb_model.json")  # Save in JSON format
-xgb_model.save_model("xgb_model.bin")  # Save in binary format
+xgb_model.save_model("xgb_model3.json")  # Save in JSON format
